@@ -7,6 +7,7 @@ import 'swiper/css';
 import SliderImgOne from '../assets/images/banner-1.jpg';
 import SliderImgTwo from '../assets/images/banner-2.jpg';
 import LatestProduct from './common/LatestProduct';
+import FeaturedProduct from './common/FeaturedProduct';
 
 
 const Home = () => {
@@ -75,6 +76,9 @@ const Home = () => {
 
             {/* New Arrival Product Section */}
             <LatestProduct />
+
+            {/* Featured Product Section */}
+            <FeaturedProduct />
         </>
     )
 }
