@@ -5,7 +5,7 @@ import ProductImgEight from '../../assets/images/mens/eight.jpg';
 const LatestProduct = () => {
     return (
         <>
-            <div className="new-arrival-product-section py-5">
+            <div className="new-arrival-product-section pt-5">
                 <div className="container">
                     <h2>New Arrival</h2>
                     <div className="row mt-4">

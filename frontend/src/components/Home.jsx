@@ -4,26 +4,19 @@ import React from 'react';
 
 
 import FeaturedProduct from './common/FeaturedProduct';
-import Footer from './common/Footer';
-import Header from './common/Header';
 import Hero from './common/Hero';
 import LatestProduct from './common/LatestProduct';
+import Layout from './common/Layout';
 
 
 const Home = () => {
     return (
         <>
-            <Header />
-
-            <Hero />
-
-            <LatestProduct />
-
-            <FeaturedProduct />
-
-            <Footer />
-
-
+            <Layout>
+                <Hero />
+                <LatestProduct />
+                <FeaturedProduct />
+            </Layout>
         </>
     )
 }

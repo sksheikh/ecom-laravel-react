@@ -152,6 +152,9 @@ footer {
     padding: 0;
     a {
       font-size: 1.2em;
+      &:hover{
+        color: $primary-color;
+      }
     }
     .price {
       font-size: 1.2em;
