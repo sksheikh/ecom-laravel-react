@@ -141,7 +141,7 @@ const Home = () => {
 
                     <div className="row pt-5">
                         <div className="col-md-12 text-center">
-                            <p>&copy; 2025 All Rights Reserved</p>
+                            <p>&copy; 2025 All Right Reserved</p>
                         </div>
                     </div>
                 </div>
