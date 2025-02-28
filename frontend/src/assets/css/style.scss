@@ -97,20 +97,18 @@ header {
   }
 }
 
-
-footer{
+footer {
   background-color: $tertiary-color;
-  .spotlight{
-      border-top: 1px solid rgba($primary-white, 0.10);
-      border-bottom: 1px solid rgba($primary-white, 0.10);
-
+  .spotlight {
+    border-top: 1px solid rgba($primary-white, 0.1);
+    border-bottom: 1px solid rgba($primary-white, 0.1);
   }
-  h2{
+  h2 {
     font-size: 1.5em;
   }
-  ul{
-    li{
-      a{
+  ul {
+    li {
+      a {
         font-size: 1.2em;
         color: $primary-white;
       }
@@ -137,30 +135,49 @@ footer{
 
 // product style
 .product {
-  .card-img{
+  .card-img {
     overflow: hidden;
     border-radius: 10px;
-    img{
+    img {
       border-radius: 10px;
       transition: all 0.3s ease-out;
     }
   }
-  &:hover{
-    img{
+  &:hover {
+    img {
       scale: 1.2;
-    };
+    }
   }
-  .card-body{
+  .card-body {
     padding: 0;
-    a{
+    a {
       font-size: 1.2em;
     }
-    .price{
+    .price {
       font-size: 1.2em;
-      span{
+      margin-bottom: 10px;
+      span {
         color: rgba($primary-black, 0.5);
       }
     }
   }
+}
 
+// Media query
+@media (min-width: 200px) and (max-width: 768px) {
+  .hero-section {
+    .swiper {
+      .swiper-wrapper {
+        .swiper-slide {
+          height: 400px;
+          .content {
+            width: 100%;
+            height: 100%;
+            background-repeat: no-repeat;
+            background-size: cover;
+          }
+        }
+      }
+    }
+  }
 }
