@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import ProductImgEight from '../assets/images/mens/eight.jpg';
 import Layout from './common/Layout';
 
@@ -69,10 +70,12 @@ const Shop = () => {
                 <div className="col-md-4">
                   <div className="product card border-0">
                     <div className="card-img">
-                      <img src={ProductImgEight} alt="product image" className='w-100' />
+                      <Link to="/product">
+                        <img src={ProductImgEight} alt="product image" className='w-100' />
+                      </Link>
                     </div>
                     <div className="card-body mt-2">
-                      <a href="">Red Check Shirt for Mens</a>
+                      <Link to="/product">Red Check Shirt for Mens</Link>
                       <div className="price">
                         $50 <span className='text-decoration-line-through'>$80</span>
                       </div>
@@ -83,10 +86,12 @@ const Shop = () => {
                 <div className="col-md-4">
                   <div className="product card border-0">
                     <div className="card-img">
-                      <img src={ProductImgEight} alt="product image" className='w-100' />
+                      <Link to="/product">
+                        <img src={ProductImgEight} alt="product image" className='w-100' />
+                      </Link>
                     </div>
                     <div className="card-body mt-2">
-                      <a href="">Red Check Shirt for Mens</a>
+                      <Link to="/product">Red Check Shirt for Mens</Link>
                       <div className="price">
                         $50 <span className='text-decoration-line-through'>$80</span>
                       </div>
@@ -97,10 +102,12 @@ const Shop = () => {
                 <div className="col-md-4">
                   <div className="product card border-0">
                     <div className="card-img">
-                      <img src={ProductImgEight} alt="product image" className='w-100' />
+                      <Link to="/product">
+                        <img src={ProductImgEight} alt="product image" className='w-100' />
+                      </Link>
                     </div>
                     <div className="card-body mt-2">
-                      <a href="">Red Check Shirt for Mens</a>
+                      <Link to="/product">Red Check Shirt for Mens</Link>
                       <div className="price">
                         $50 <span className='text-decoration-line-through'>$80</span>
                       </div>
@@ -111,10 +118,12 @@ const Shop = () => {
                 <div className="col-md-4">
                   <div className="product card border-0">
                     <div className="card-img">
-                      <img src={ProductImgEight} alt="product image" className='w-100' />
+                      <Link to="/product">
+                        <img src={ProductImgEight} alt="product image" className='w-100' />
+                      </Link>
                     </div>
                     <div className="card-body mt-2">
-                      <a href="">Red Check Shirt for Mens</a>
+                      <Link to="/product">Red Check Shirt for Mens</Link>
                       <div className="price">
                         $50 <span className='text-decoration-line-through'>$80</span>
                       </div>
@@ -125,30 +134,34 @@ const Shop = () => {
                 <div className="col-md-4">
                   <div className="product card border-0">
                     <div className="card-img">
-                      <img src={ProductImgEight} alt="product image" className='w-100' />
+                      <Link to="/product">
+                        <img src={ProductImgEight} alt="product image" className='w-100' />
+                      </Link>
                     </div>
                     <div className="card-body mt-2">
-                      <a href="">Red Check Shirt for Mens</a>
+                      <Link to="/product">Red Check Shirt for Mens</Link>
                       <div className="price">
                         $50 <span className='text-decoration-line-through'>$80</span>
                       </div>
                     </div>
                   </div>
                 </div>
-
                 <div className="col-md-4">
                   <div className="product card border-0">
                     <div className="card-img">
-                      <img src={ProductImgEight} alt="product image" className='w-100' />
+                      <Link to="/product">
+                        <img src={ProductImgEight} alt="product image" className='w-100' />
+                      </Link>
                     </div>
                     <div className="card-body mt-2">
-                      <a href="">Red Check Shirt for Mens</a>
+                      <Link to="/product">Red Check Shirt for Mens</Link>
                       <div className="price">
                         $50 <span className='text-decoration-line-through'>$80</span>
                       </div>
                     </div>
                   </div>
                 </div>
+                
               </div>
             </div>
           </div>
