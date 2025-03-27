@@ -11,7 +11,7 @@ const Sidebar = () => {
                     <ul>
                         <li><a href="">Dashboard</a></li>
                         <li><Link to="/admin/categories">Categories</Link></li>
-                        <li><a href="">Brands</a></li>
+                        <li><Link to="/admin/brands">Brands</Link></li>
                         <li><a href="">Products</a></li>
                         <li><a href="">Orders</a></li>
                         <li><a href="">Users</a></li>
