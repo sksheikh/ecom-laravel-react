@@ -1,10 +1,8 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import Layout from '../common/Layout'
-import { AdminAuthContext } from '../context/AdminAuth'
 import Sidebar from '../common/Sidebar'
 
 const Dashboard = () => {
-  const {logout} = useContext(AdminAuthContext)
   return (
     <Layout>
       {/* <h2>dashboard</h2> */}
@@ -47,7 +45,7 @@ const Dashboard = () => {
                 <div className="card shadow">
                   <div className="card-body">
                     <h2>1</h2>
-                    <span>Products</span> 
+                    <span>Products</span>
                   </div>
                   <div className="card-footer">
                     <a href="">View Products</a>

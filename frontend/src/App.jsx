@@ -8,6 +8,7 @@ import Shop from './components/Shop'
 import { AdminRequireAuth } from './components/admin/AdminRequireAuth'
 import Dashboard from './components/admin/Dashboard'
 import Login from './components/admin/Login'
+import {default as ShowCategory} from './components/admin/category/Show'
 
 function App() {
 
@@ -26,6 +27,12 @@ function App() {
           <Route path='/admin/dashboard' element={
             <AdminRequireAuth >
               <Dashboard />
+            </AdminRequireAuth>
+          } />
+
+          <Route path='/admin/categories' element={
+            <AdminRequireAuth >
+              <ShowCategory />
             </AdminRequireAuth>
           } />
 
