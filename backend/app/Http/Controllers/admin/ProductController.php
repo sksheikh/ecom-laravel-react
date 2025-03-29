@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\TempImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Intervention\Image\ImageManager;
 use Illuminate\Support\Facades\Validator;
+use Intervention\Image\Drivers\Imagick\Driver;
 
 class ProductController extends Controller
 {
@@ -35,25 +39,68 @@ class ProductController extends Controller
             ], 400);
         }
 
-        $product = new Product();
-        $product->title = $request->title;
-        $product->price = $request->price;
-        $product->compare_price = $request->compare_price;
-        $product->category_id = $request->category;
-        $product->brand_id = $request->brand;
-        $product->sku = $request->sku;
-        $product->qty = $request->qty;
-        $product->description = $request->description;
-        $product->short_description = $request->short_description;
-        $product->barcode = $request->barcode;
-        $product->is_featured = $request->is_featured;
-        $product->status = $request->status;
-        $product->save();
+        DB::beginTransaction();
+        try {
+            $product = new Product();
+            $product->title = $request->title;
+            $product->price = $request->price;
+            $product->compare_price = $request->compare_price;
+            $product->category_id = $request->category;
+            $product->brand_id = $request->brand;
+            $product->sku = $request->sku;
+            $product->qty = $request->qty;
+            $product->description = $request->description;
+            $product->short_description = $request->short_description;
+            $product->barcode = $request->barcode;
+            $product->is_featured = $request->is_featured;
+            $product->status = $request->status;
+            $product->save();
 
-        return response()->json([
-            'status' => 200,
-            'message' => 'Product has been created successfully'
-        ], 200);
+            if (!empty($request->gallery)) {
+                foreach ($request->gallery as $key => $tempImageId) {
+                    $tempImage = TempImage::find($tempImageId);
+
+                    if (!$tempImage) {
+                        throw new \Exception("Temp image not found");
+                    }
+
+                    // Large thumbnail
+                    $extArray = explode('.', $tempImage->name);
+                    $ext = end($extArray);
+                    $imageName = $product->id . '-' . time() . '.' . $ext;
+
+                    $manager = new ImageManager(Driver::class);
+                    $img = $manager->read(public_path('uploads/temp/' . $tempImage->name));
+                // dd($img);
+                    $img->scaleDown(1200);
+                    $img->save(public_path('uploads/products/large/' . $imageName));
+
+                    // Small thumbnail
+                    $img = $manager->read(public_path('uploads/temp/' . $tempImage->name));
+                    $img->coverDown(400, 460);
+                    $img->save(public_path('uploads/products/small/' . $imageName));
+
+                    if ($key == 0) {
+                        $product->image = $imageName;
+                        $product->save();
+                    }
+                }
+            }
+
+            DB::commit(); // Commit transaction if everything is successful
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Product has been created successfully'
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack(); // Rollback transaction if any error occurs
+            return response()->json([
+                'status' => 500,
+                'message' => 'Something went wrong!',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function show($id) {
