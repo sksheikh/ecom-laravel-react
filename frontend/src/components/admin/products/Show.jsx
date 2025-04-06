@@ -43,16 +43,16 @@ const Show = () => {
                     'Authorization': `Bearer ${adminToken()}`
                 }
             })
-            .then(res => res.json())
-            .then(result => {
-                if (result.status == 200) {
-                    const newproducts = products.filter(product => product.id != id)
-                    setProducts(newproducts);
-                    toast.success(result.message)
-                } else {
-                    console.log('Something went wrong');
-                }
-            });
+                .then(res => res.json())
+                .then(result => {
+                    if (result.status == 200) {
+                        const newproducts = products.filter(product => product.id != id)
+                        setProducts(newproducts);
+                        toast.success(result.message)
+                    } else {
+                        console.log('Something went wrong');
+                    }
+                });
         }
     }
 
@@ -93,9 +93,14 @@ const Show = () => {
                                             {products.map((product, key) => (
                                                 <tr key={product.id} className='align-middle'>
                                                     <td>{key + 1}</td>
-                                                    <td><img src={product.image_url} alt="" width={50} /></td>
+                                                    <td>
+                                                        {product.image_url == "" ?
+                                                            <img src='https://placehold.co/50x50' alt width={50} /> :
+                                                            <img src={product.image_url} alt="" width={50} />
+                                                        }
+                                                    </td>
                                                     <td>{product.title}</td>
-                                                    <td>{product.price}</td>
+                                                    <td>${product.price}</td>
                                                     <td>{product.qty}</td>
                                                     <td>{product.sku}</td>
                                                     <td>
