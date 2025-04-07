@@ -13,6 +13,10 @@ const Create = ({ placeholder }) => {
     const [brands, setBrands] = useState([]);
     const editor = useRef(null);
     const [content, setContent] = useState('')
+    const [gallery, setGallery] = useState([]);
+    const [galleryImages, setGalleryImages] = useState([]);
+    const [sizes, setSizes] = useState([]);
+    const [sizesChecked, setSizesChecked] = useState([]);
     const navigate = useNavigate();
 
     const config = useMemo(() => ({
@@ -33,7 +37,7 @@ const Create = ({ placeholder }) => {
 
     //submit product create form
     const createProduct = async (data) => {
-        const formData = {...data, "description": content}
+        const formData = { ...data, "description": content, "gallery": gallery }
         console.log(formData)
         // return;
         setDisable(true)
@@ -55,10 +59,47 @@ const Create = ({ placeholder }) => {
                 } else {
                     const formErrors = result.errors;
                     Object.keys(formErrors).forEach(field => {
-                        setError(field, {message:formErrors[field][0]});
+                        setError(field, { message: formErrors[field][0] });
                     })
                 }
             })
+    }
+
+    //handle file
+    const handleFile = async (e) => {
+        const formData = new FormData();
+        const file = e.target.files[0];
+        formData.append("image", file)
+        console.log(formData)
+        // return
+
+        setDisable(true)
+        const res = await fetch(`${baseUrl}/temp-images`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${adminToken()}`
+            },
+            body: formData
+        }).then(res => res.json())
+            .then(result => {
+                console.log(result)
+                gallery.push(result.data.id)
+                setGallery(gallery)
+
+                galleryImages.push(result.data.image_url)
+                setGalleryImages(galleryImages)
+
+                setDisable(false)
+                e.target.value = ""
+
+            })
+    }
+
+    //handle delete image 
+    const handleDelete = (image) => {
+        const newGallaryImages = galleryImages.filter(gallary => gallary != image);
+        setGalleryImages(newGallaryImages);
     }
 
     //fetch all categories
@@ -95,9 +136,27 @@ const Create = ({ placeholder }) => {
             })
     }
 
+     //fetch all sizes
+     const fetchSizes = async () => {
+        const res = await fetch(`${baseUrl}/sizes`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${adminToken()}`
+            }
+        }).then(res => res.json())
+            .then(result => {
+                // console.log(result)
+                setSizes(result.data)
+
+            })
+    }
+
     useEffect(() => {
         fetchCategories();
         fetchBrands();
+        fetchSizes();
     }, []);
 
     return (
@@ -298,10 +357,60 @@ const Create = ({ placeholder }) => {
                                         {errors.is_featured && <p className='invalid-feedback'>{errors.is_featured?.message}</p>}
                                     </div>
 
+                                    <h3 className='border-bottom py-3 mb-3'>Sizes</h3>
+                                    <div className="mb-3">
+                                        {sizes && sizes.map(size => {
+                                            return (
+                                                <div className="form-check-inline ps-2" key={size.id}>
+                                                    <input
+                                                        {...register('sizes')} 
+                                                        checked={sizesChecked.includes(size.id)}
+                                                        onChange={(e)=>{
+                                                            if(e.target.checked){
+                                                                setSizesChecked([...sizesChecked, size.id])
+                                                            }else{
+                                                                setSizesChecked(sizesChecked.filter(sId => sId != size.id))
+                                                            }
+                                                        }}
+                                                        className="form-check-input" 
+                                                        type="checkbox" value={size.id} 
+                                                        id={`size-${size.id}`} />
+                                                    <label className="form-check-label ps-2" htmlFor={`size-${size.id}`}>
+                                                        {size.name}
+                                                    </label>
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+
                                     <h3 className='border-bottom py-3 mb-3'>Gallery</h3>
                                     <div className="mb-3">
                                         <label htmlFor="image" className="form-label">Image</label>
-                                        <input {...register('image')} type="file" name="" id="image" className='form-control' />
+                                        <input
+                                            // {...register('image')} 
+                                            type="file"
+                                            id="image"
+                                            onChange={handleFile}
+                                            className='form-control' />
+                                    </div>
+
+                                    <div className="mb-3">
+                                        <div className="row">
+                                            {
+                                                galleryImages && galleryImages.map((image, index) => {
+                                                    return (
+                                                        <div className="col-md-3" key={index}>
+                                                            <div className="card shadow">
+                                                                <img src={image} alt="" className='w-100' />
+                                                            </div>
+                                                            <button 
+                                                                onClick={() => handleDelete(image)} 
+                                                                className='btn btn-danger mt-2 w-100'>delete</button>
+                                                        </div>
+                                                    )
+                                                })
+                                            }
+                                        </div>
                                     </div>
 
 
