@@ -15,6 +15,8 @@ const Create = ({ placeholder }) => {
     const [content, setContent] = useState('')
     const [gallery, setGallery] = useState([]);
     const [galleryImages, setGalleryImages] = useState([]);
+    const [sizes, setSizes] = useState([]);
+    const [sizesChecked, setSizesChecked] = useState([]);
     const navigate = useNavigate();
 
     const config = useMemo(() => ({
@@ -117,8 +119,6 @@ const Create = ({ placeholder }) => {
             })
     }
 
-    
-
     //fetch all categories
     const fetchBrands = async () => {
         const res = await fetch(`${baseUrl}/brands`, {
@@ -136,9 +136,27 @@ const Create = ({ placeholder }) => {
             })
     }
 
+     //fetch all sizes
+     const fetchSizes = async () => {
+        const res = await fetch(`${baseUrl}/sizes`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': `Bearer ${adminToken()}`
+            }
+        }).then(res => res.json())
+            .then(result => {
+                // console.log(result)
+                setSizes(result.data)
+
+            })
+    }
+
     useEffect(() => {
         fetchCategories();
         fetchBrands();
+        fetchSizes();
     }, []);
 
     return (
@@ -339,6 +357,32 @@ const Create = ({ placeholder }) => {
                                         {errors.is_featured && <p className='invalid-feedback'>{errors.is_featured?.message}</p>}
                                     </div>
 
+                                    <h3 className='border-bottom py-3 mb-3'>Sizes</h3>
+                                    <div className="mb-3">
+                                        {sizes && sizes.map(size => {
+                                            return (
+                                                <div className="form-check-inline ps-2" key={size.id}>
+                                                    <input
+                                                        {...register('sizes')} 
+                                                        checked={sizesChecked.includes(size.id)}
+                                                        onChange={(e)=>{
+                                                            if(e.target.checked){
+                                                                setSizesChecked([...sizesChecked, size.id])
+                                                            }else{
+                                                                setSizesChecked(sizesChecked.filter(sId => sId != size.id))
+                                                            }
+                                                        }}
+                                                        className="form-check-input" 
+                                                        type="checkbox" value={size.id} 
+                                                        id={`size-${size.id}`} />
+                                                    <label className="form-check-label ps-2" htmlFor={`size-${size.id}`}>
+                                                        {size.name}
+                                                    </label>
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+
                                     <h3 className='border-bottom py-3 mb-3'>Gallery</h3>
                                     <div className="mb-3">
                                         <label htmlFor="image" className="form-label">Image</label>
@@ -358,8 +402,10 @@ const Create = ({ placeholder }) => {
                                                         <div className="col-md-3" key={index}>
                                                             <div className="card shadow">
                                                                 <img src={image} alt="" className='w-100' />
-                                                                <button onClick={() => handleDelete(image)} className='btn btn-danger'>delete</button>
                                                             </div>
+                                                            <button 
+                                                                onClick={() => handleDelete(image)} 
+                                                                className='btn btn-danger mt-2 w-100'>delete</button>
                                                         </div>
                                                     )
                                                 })
