@@ -143,34 +143,34 @@ const Create = ({ placeholder }) => {
 
     //handle delete image 
     const handleDelete = async (id) => {
-        console.log(id)
-        const res = await fetch(`${baseUrl}/product-image-delete/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${adminToken()}`
-            }
-        }).then(res => res.json())
-            .then(result => {
-                // console.log(result)
-                if (result.status == 200) {
-                    setProductImages(productImages.filter(productImage => productImage.id != id))
-                    toast.success(result.message)
-                } else {
-                    toast.error(result.message || "something went wrong!")
+        // console.log(id)
+        if (confirm("Are you sure you want to delete image?")) {
+            const res = await fetch(`${baseUrl}/product-image-delete/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${adminToken()}`
                 }
-                // gallery.push(result.data.id)
-                // setGallery(gallery)
+            }).then(res => res.json())
+                .then(result => {
+                    // console.log(result)
+                    if (result.status == 200) {
+                        setProductImages(productImages.filter(productImage => productImage.id != id))
+                        toast.success(result.message)
+                    } else {
+                        toast.error(result.message || "something went wrong!")
+                    }
+                    // gallery.push(result.data.id)
+                    // setGallery(gallery)
 
-                // galleryImages.push(result.data.image_url)
-                // setGalleryImages(galleryImages)
+                    // galleryImages.push(result.data.image_url)
+                    // setGalleryImages(galleryImages)
 
-                setDisable(false)
-                e.target.value = ""
+                    setDisable(false)
+                    e.target.value = ""
 
-            })
-        // const newGallaryImages = productImages.filter(gallary => gallary.image_url != image);
-        // setProductImages(newGallaryImages);
+                })
+        }
     }
 
     //change Default Image 
@@ -463,17 +463,17 @@ const Create = ({ placeholder }) => {
                                             return (
                                                 <div className="form-check-inline ps-2" key={size.id}>
                                                     <input
-                                                        {...register('sizes')} 
+                                                        {...register('sizes')}
                                                         checked={sizesChecked.includes(size.id)}
-                                                        onChange={(e)=>{
-                                                            if(e.target.checked){
+                                                        onChange={(e) => {
+                                                            if (e.target.checked) {
                                                                 setSizesChecked([...sizesChecked, size.id])
-                                                            }else{
+                                                            } else {
                                                                 setSizesChecked(sizesChecked.filter(sId => sId != size.id))
                                                             }
                                                         }}
-                                                        className="form-check-input" 
-                                                        type="checkbox" value={size.id} 
+                                                        className="form-check-input"
+                                                        type="checkbox" value={size.id}
                                                         id={`size-${size.id}`} />
                                                     <label className="form-check-label ps-2" htmlFor={`size-${size.id}`}>
                                                         {size.name}

@@ -50,7 +50,8 @@ const Show = () => {
                         setProducts(newproducts);
                         toast.success(result.message)
                     } else {
-                        console.log('Something went wrong');
+                        
+                        toast.error(result.message || "something went wrong!")
                     }
                 });
         }
