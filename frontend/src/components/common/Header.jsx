@@ -1,10 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Nav, Navbar } from 'react-bootstrap';
-import Logo from '../../assets/images/logo.png';
 import { Link } from 'react-router-dom';
+import Logo from '../../assets/images/logo.png';
+import { baseUrl } from './http';
 
 
 const Header = () => {
+    const [categories, setCategories] = useState([]);
+
+    const fetchCategories = async () => {
+        const res = await fetch(`${baseUrl}/get-categories`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        }).then(res => res.json())
+            .then(result => {
+                // console.log(result)
+                if (result.status == 200) {
+                    setCategories(result.data)
+                } else {
+                    console.log(result.message || 'something went wrong');
+                }
+            });
+    }
+
+    useEffect(() => {
+        fetchCategories();
+    }, []);
+
+    // console.log(categories)
+
     return (
         <>
             <header className='shadow'>
@@ -23,9 +50,13 @@ const Header = () => {
                                 className="ms-auto my-2 my-lg-0"
                                 navbarScroll
                             >
-                                <Nav.Link href="#action1">Mens</Nav.Link>
-                                <Nav.Link href=''>Women</Nav.Link>
-                                <Nav.Link href="#action2">Kids</Nav.Link>
+                                {
+                                    categories && categories.map(category => {
+                                        return (
+                                            <Nav.Link href={`/shop?category=${category.id}`}>{category.name}</Nav.Link>
+                                        )
+                                    })
+                                }
                             </Nav>
 
                             <div className="nav-right d-flex">
