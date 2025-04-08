@@ -71,7 +71,7 @@ const Shop = () => {
       setSearchParams(params);
     }
 
-    console.log(search);
+    // console.log(search);
     const res = await fetch(`${baseUrl}/get-products?${params}`, {
       method: "GET",
       headers: {
@@ -190,7 +190,7 @@ const Shop = () => {
                     <div key={product.id} className="col-md-4">
                       <div className="product card border-0">
                         <div className="card-img">
-                          <Link to="/product">
+                          <Link to={`/product/${product.id}`}>
                             {product.image_url ?
                               <img src={product.image_url} alt="product image" className='w-100' /> :
                               <img src="https://placehold.co/400x460" alt="product image" className='w-100' />
@@ -198,7 +198,7 @@ const Shop = () => {
                           </Link>
                         </div>
                         <div className="card-body mt-2">
-                          <Link to="/product">{product.title}</Link>
+                          <Link to={`/product/${product.id}`}>{product.title}</Link>
                           <div className="price">
                             ${product.price} &nbsp;
                             {product.compare_price && <span className='text-decoration-line-through'>${product.compare_price}</span>}
