@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import Layout from './common/Layout';
 import { baseUrl } from './common/http';
 
@@ -8,7 +8,15 @@ const Shop = () => {
   const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
   const [products, setProducts] = useState([]);
-  const [checkedCat, setCheckedCat] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [checkedCat, setCheckedCat] = useState(() => {
+    const category = searchParams.get('category');
+    return category ? category.split(',') : [];
+  });
+  const [checkedBrand, setCheckedBrand] = useState(() => {
+    const brand = searchParams.get('brand');
+    return brand ? brand.split(',') : [];
+  });
 
   const fetchCategories = async () => {
     const res = await fetch(`${baseUrl}/get-categories`, {
@@ -47,7 +55,24 @@ const Shop = () => {
   }
 
   const fetchProducts = async () => {
-    const res = await fetch(`${baseUrl}/get-products`, {
+    let search = [];
+    let params = "";
+
+    if (checkedCat.length > 0) {
+      search.push(['category', checkedCat])
+    }
+
+    if (checkedBrand.length > 0) {
+      search.push(['brand', checkedBrand])
+    }
+
+    if (search.length > 0) {
+      params = new URLSearchParams(search)
+      setSearchParams(params);
+    }
+
+    console.log(search);
+    const res = await fetch(`${baseUrl}/get-products?${params}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -55,7 +80,7 @@ const Shop = () => {
       }
     }).then(res => res.json())
       .then(result => {
-        console.log(result)
+        // console.log(result)
         if (result.status == 200) {
           setProducts(result.data)
         } else {
@@ -65,21 +90,32 @@ const Shop = () => {
   }
 
   const handleCategory = (e) => {
-    const {checked, value} = e.target;
-    if(checked){
+    const { checked, value } = e.target;
+    if (checked) {
       setCheckedCat(prev => [...prev, value]);
-    }else{
+    } else {
       setCheckedCat(checkedCat.filter(cat => cat != value));
     }
   }
 
-  console.log('checkedCat: '+ checkedCat);
+  const handleBrand = (e) => {
+    const { checked, value } = e.target;
+    if (checked) {
+      setCheckedBrand(prev => [...prev, value]);
+    } else {
+      setCheckedBrand(checkedBrand.filter(brand => brand != value));
+    }
+  }
+
+  // console.log('checkedBrand: '+ checkedBrand);
+  // console.log('checkedCat: '+ checkedCat);
+
 
   useEffect(() => {
     fetchCategories();
     fetchBrands();
     fetchProducts();
-  }, [])
+  }, [checkedCat, checkedBrand])
 
   return (
     <>
@@ -102,8 +138,13 @@ const Shop = () => {
                       categories && categories.map((category) => {
                         return (
                           <li key={category.id} className='mb-2'>
-                            <input 
-                              type="checkbox" 
+                            <input
+                              defaultChecked={
+                                searchParams.get('category')
+                                  ? searchParams.get('category').includes(category.id)
+                                  : false
+                              }
+                              type="checkbox"
                               value={category.id}
                               onClick={handleCategory} />
                             <span className='ps-2'>{category.name}</span>
@@ -123,7 +164,15 @@ const Shop = () => {
                       brands && brands.map((brand) => {
                         return (
                           <li key={brand.id} className='mb-2'>
-                            <input type="checkbox" value={brand.id} />
+                            <input
+                               defaultChecked={
+                                searchParams.get('brand')
+                                  ? searchParams.get('brand').includes(brand.id)
+                                  : false
+                              }
+                              type="checkbox"
+                              value={brand.id}
+                              onClick={handleBrand} />
                             <span className='ps-2'>{brand.name}</span>
                           </li>
                         )
