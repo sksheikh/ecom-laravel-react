@@ -382,8 +382,12 @@ const Create = ({ placeholder }) => {
 
                                         <div className="col-md-6">
                                             <div className="mb-3">
-                                                <label htmlFor="discounted_price" className="form-label">Discounted Price</label>
-                                                <input {...register('compare_price')} type="text" placeholder='discounted price' className='form-control' />
+                                                <label htmlFor="compare_price" className="form-label">Compare Price</label>
+                                                <input 
+                                                    {...register('compare_price')} 
+                                                    type="text" 
+                                                    placeholder='compare price' 
+                                                    className='form-control' />
                                             </div>
                                         </div>
                                     </div>
