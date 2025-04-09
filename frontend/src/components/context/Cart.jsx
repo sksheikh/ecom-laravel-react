@@ -27,10 +27,10 @@ export const CartProvider = ({ children }) => {
                 if (isProductExist) {
                     updatedCart = updatedCart.map(item =>
                         (item.product_id == product.id && item.size == size)
-                            ? {...item, qty: item.qty + 1}
+                            ? { ...item, qty: item.qty + 1 }
                             : item
                     )
-                }else{
+                } else {
                     //product not exist in cart
                     updatedCart.push({
                         id: `${product.id}-${Math.floor(Math.random() * 10000000)}`,
@@ -42,7 +42,7 @@ export const CartProvider = ({ children }) => {
                         image_url: product.image_url
                     })
                 }
-            }else{
+            } else {
                 const isProductExist = updatedCart.find(item =>
                     item.product_id == product.id);
 
@@ -50,10 +50,10 @@ export const CartProvider = ({ children }) => {
                 if (isProductExist) {
                     updatedCart = updatedCart.map(item =>
                         (item.product_id == product.id)
-                            ? {...item, qty: item.qty + 1}
+                            ? { ...item, qty: item.qty + 1 }
                             : item
                     )
-                }else{
+                } else {
                     //product not exist in cart
                     updatedCart.push({
                         id: `${product.id}-${Math.floor(Math.random() * 10000000)}`,
@@ -89,9 +89,29 @@ export const CartProvider = ({ children }) => {
         return subTotal() + shipping();
     }
 
+    const updateCartItem = (itemId, newQty) => {
+        let updatedCart = [...cartData];
+        updatedCart = cartData.map(item => 
+            (item.id == itemId)
+                ? {...item, qty: newQty }
+                : item
+        )
+
+        setCartData(updatedCart)
+        localStorage.setItem('cart', JSON.stringify(updatedCart));
+    }
+
+    const removeCartItem = (itemId) => {
+        let newCart = [...cartData];
+        newCart = cartData.filter(item => item.id != itemId)
+
+        setCartData(newCart)
+        localStorage.setItem('cart', JSON.stringify(newCart));
+    }
+
 
     return (
-        <CartContext.Provider value={{ addToCart, cartData, shipping, subTotal, grandTotal }}>
+        <CartContext.Provider value={{ addToCart, cartData, shipping, subTotal, grandTotal, updateCartItem, removeCartItem }}>
             {children}
         </CartContext.Provider>
     )
