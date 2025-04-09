@@ -91,9 +91,9 @@ export const CartProvider = ({ children }) => {
 
     const updateCartItem = (itemId, newQty) => {
         let updatedCart = [...cartData];
-        updatedCart = cartData.map(item => 
+        updatedCart = cartData.map(item =>
             (item.id == itemId)
-                ? {...item, qty: newQty }
+                ? { ...item, qty: newQty }
                 : item
         )
 
@@ -109,9 +109,26 @@ export const CartProvider = ({ children }) => {
         localStorage.setItem('cart', JSON.stringify(newCart));
     }
 
+    const getQty = () => {
+        let qty = 0;
+        cartData.map(item =>
+            qty += parseInt(item.qty)
+        )
+        return qty;
+    }
+
 
     return (
-        <CartContext.Provider value={{ addToCart, cartData, shipping, subTotal, grandTotal, updateCartItem, removeCartItem }}>
+        <CartContext.Provider value={{
+            addToCart,
+            cartData,
+            shipping,
+            subTotal,
+            grandTotal,
+            updateCartItem,
+            removeCartItem,
+            getQty
+        }}>
             {children}
         </CartContext.Provider>
     )
