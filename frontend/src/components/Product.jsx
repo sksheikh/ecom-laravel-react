@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Rating } from 'react-simple-star-rating';
 import 'swiper/css';
@@ -7,12 +7,13 @@ import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 import { FreeMode, Navigation, Thumbs } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import ProductImgOne from '../assets/images/mens/five.jpg';
 import Layout from './common/Layout';
 
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
+import { toast } from 'react-toastify';
 import { baseUrl } from './common/http';
+import { CartContext } from './context/Cart';
 
 
 const Product = () => {
@@ -22,6 +23,8 @@ const Product = () => {
     const [productImages, setProductImages] = useState([]);
     const [productSizes, setProductSizes] = useState([]);
     const params = useParams();
+    const [selectedSize, setSelectedSize] = useState(null);
+    const { addToCart } = useContext(CartContext);
 
     const fetchProduct = () => {
         fetch(`${baseUrl}/get-product/${params.id}`, {
@@ -41,6 +44,23 @@ const Product = () => {
                     console.log(result.message || 'something went wrong')
                 }
             })
+    }
+
+    console.log(selectedSize)
+
+    const handleAddToCart = () => {
+        console.log('ok');
+        if (productSizes.length > 0) {
+            if (selectedSize == null) {
+                toast.error('Please select a size')
+            } else {
+                addToCart(product, selectedSize)
+                toast.success('Product added to cart successfully')
+            }
+        } else {
+            addToCart(product, null)
+            toast.success('Product added to cart successfully')
+        }
     }
 
     useEffect(() => {
@@ -157,18 +177,25 @@ const Product = () => {
                             <strong>Select Sizes:</strong>
                             <div className="sizes pt-2">
                                 {
-                                    productSizes && productSizes.map(productSize=> {
+                                    productSizes && productSizes.map(productSize => {
                                         return (
-                                            <button key={productSize.id} className='btn btn-size ms-1'>{productSize.size.name}</button>
+                                            <button
+                                                key={productSize.id}
+                                                className={`btn btn-size ms-1 ${selectedSize == productSize.size.name ? 'active' : ''}`}
+                                                onClick={() => setSelectedSize(productSize.size.name)}
+                                            >{productSize.size.name}</button>
                                         )
                                     })
                                 }
-                                
+
                             </div>
                         </div>
 
                         <div className="add-to-cart my-3">
-                            <button className='btn btn-primary'>Add to cart</button>
+                            <button
+                                className='btn btn-primary'
+                                onClick={handleAddToCart}
+                            >Add to cart</button>
                         </div>
 
                         <hr />
@@ -188,7 +215,7 @@ const Product = () => {
                             className="mb-3"
                         >
                             <Tab eventKey="description" title="Description">
-                                <div dangerouslySetInnerHTML={{ __html:product.description }}></div>
+                                <div dangerouslySetInnerHTML={{ __html: product.description }}></div>
                             </Tab>
                             <Tab eventKey="review" title="Reviews(10)">
                                 Tab content for Reviews(10)

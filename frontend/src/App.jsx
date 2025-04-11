@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import Cart from './components/Cart'
 import Checkout from './components/Checkout'
+import { CustomerRequireAuth } from './components/CustomerRequireAuth'
 import Home from './components/Home'
 import Product from './components/Product'
 import Shop from './components/Shop'
@@ -22,6 +23,12 @@ import { default as CreateProduct } from './components/admin/products/Create'
 import { default as EditProduct } from './components/admin/products/Edit'
 import { default as ShowProduct } from './components/admin/products/Show'
 
+import { default as CustomerProfile } from './components/Profile'
+import { default as CustomerLogin } from './components/Login'
+import { default as CustomerRegister } from './components/Register'
+
+
+
 function App() {
 
 
@@ -33,7 +40,16 @@ function App() {
           <Route path='/shop' element={<Shop />} />
           <Route path='/product/:id' element={<Product />} />
           <Route path='/cart' element={<Cart />} />
+          <Route path='/account/login' element={<CustomerLogin />} />
+          <Route path='/account/register' element={<CustomerRegister />} />
           <Route path='/checkout' element={<Checkout />} />
+
+          <Route path='/account/' element={
+            <CustomerRequireAuth >
+              <CustomerProfile />
+            </CustomerRequireAuth>
+          } />
+
 
           <Route path='/admin/login' element={<Login />} />
           <Route path='/admin/dashboard' element={
