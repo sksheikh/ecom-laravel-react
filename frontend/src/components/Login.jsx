@@ -30,14 +30,14 @@ const Login = () => {
                 // console.log(result)
 
                 if (result.status == 200) {
-                    const customerInfo = {
+                    const userInfo = {
                         token: result.token,
                         id: result.id,
                         name: result.name
                     }
 
-                    localStorage.setItem('customerInfo', JSON.stringify(customerInfo))
-                    login(customerInfo)
+                    localStorage.setItem('userInfo', JSON.stringify(userInfo))
+                    login(userInfo)
                     navigate('/account')
                 } else {
                     // const formErrors = result.errors;

@@ -23,9 +23,10 @@ import { default as CreateProduct } from './components/admin/products/Create'
 import { default as EditProduct } from './components/admin/products/Edit'
 import { default as ShowProduct } from './components/admin/products/Show'
 
-import { default as CustomerProfile } from './components/Profile'
 import { default as CustomerLogin } from './components/Login'
+import { default as CustomerProfile } from './components/Profile'
 import { default as CustomerRegister } from './components/Register'
+import Confirmation from './components/Confirmation'
 
 
 
@@ -42,11 +43,22 @@ function App() {
           <Route path='/cart' element={<Cart />} />
           <Route path='/account/login' element={<CustomerLogin />} />
           <Route path='/account/register' element={<CustomerRegister />} />
-          <Route path='/checkout' element={<Checkout />} />
+
+          <Route path='/checkout' element={
+            <CustomerRequireAuth>
+              <Checkout />
+            </CustomerRequireAuth>
+          } />
 
           <Route path='/account/' element={
             <CustomerRequireAuth >
               <CustomerProfile />
+            </CustomerRequireAuth>
+          } />
+
+          <Route path='/order/confirmation/:id' element={
+            <CustomerRequireAuth>
+              <Confirmation />
             </CustomerRequireAuth>
           } />
 
