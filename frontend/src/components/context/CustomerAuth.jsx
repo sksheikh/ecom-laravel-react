@@ -4,19 +4,19 @@ import { createContext, useState } from "react";
 export const CustomerAuthContext = createContext();
 
 export const CustomerAuthProvider = ({ children }) => {
-    const customerInfo = localStorage.getItem('customerInfo');
-    const [user, setUser] = useState(customerInfo);
+    const userInfo = localStorage.getItem('userInfo');
+    const [user, setUser] = useState(userInfo);
 
     const login = (user) => {
         setUser(user);
     }
 
     const logout = () => {
-        localStorage.removeItem('customerInfo');
+        localStorage.removeItem('userInfo');
         setUser(null);
     }
 
-    return <CustomerAuthContext.Provider value={{ user,login,logout}}>
+    return <CustomerAuthContext.Provider value={{ user, login, logout }}>
         {children}
     </CustomerAuthContext.Provider>
 
