@@ -51,7 +51,7 @@ const ShowOrders = () => {
                         <div className="card shadow">
                             <div className="card-body p-4">
                                 {loader && <Loader />}
-                                {orders && orders.length > 0 ?
+                                {!loader && orders.length > 0 &&
                                     <table className="table table-hover">
                                         <thead>
                                             <tr>
@@ -94,9 +94,11 @@ const ShowOrders = () => {
                                                 </tr>
                                             ))}
                                         </tbody>
-                                    </table> :
+                                    </table> 
+                                }
 
-                                    <NotFound text='orders not found!' />
+                                {!loader && orders.length == 0 &&
+                                     <NotFound text='orders not found!' />
                                 }
                             </div>
                         </div>
