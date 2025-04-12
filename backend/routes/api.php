@@ -24,22 +24,14 @@ Route::get('get-product/{id}', [FrontProductController::class, 'getProduct']);
 Route::post('register', [AccountController::class, 'register']);
 Route::post('login', [AccountController::class, 'authenticate']);
 
-Route::group(['middleware' => 'auth:sanctum'], function () {
+Route::group(['middleware' => ['auth:sanctum', 'checkUserRole']], function () {
     Route::post('save-order', [OrderController::class, 'saveOrder']);
 });
 
 
-// Route::get('/user', function (Request $request) {
-//     return $request->user();
-// })->middleware('auth:sanctum');
 
-Route::group(['middleware' => 'auth:sanctum'], function () {
-    // Route::get('categories', [CategoryController::class, 'index']);
-    // Route::get('categories/{id}', [CategoryController::class, 'show']);
-    // Route::post('categories/{id}', [CategoryController::class, 'update']);
-    // Route::delete('categories/{id}', [CategoryController::class, 'destroy']);
-    // Route::post('categories/store', [CategoryController::class, 'store']);
 
+Route::group(['middleware' => ['auth:sanctum', 'checkAdminRole']], function () {
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('brands', BrandController::class);
     Route::get('sizes', [SizeController::class, 'index']);
